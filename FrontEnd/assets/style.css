@@ -280,11 +280,34 @@ a:hover {
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-auto-rows: 1fr;
 	grid-column-gap: 8px;
-	grid-row-gap: 10px;
+	grid-row-gap: 25px;
 	width: 70%;
 	border-bottom: 1px solid #B3B3B3;
 	padding-bottom: 47px;
 }
+
+.imgContainer{
+	position: relative;
+}
+
+.imgContainer img{
+	width: 100%;
+}
+
+.imgContainer i {
+	display: block;
+	box-sizing: border-box;
+	background-color: #000000;
+	color: #FFFFFF;
+	font-size: 0.7em;
+	padding: 4px 5px;
+	border-radius: 2px;
+	position: absolute;
+	top: 7px;
+	right: 7px;	
+	cursor: pointer;
+}
+
 
 .addImg {
 	width: 40% !important;

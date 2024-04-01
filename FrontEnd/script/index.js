@@ -11,6 +11,7 @@ window.onload = () => {
       works = data;
       //fonction affichage works
       showGallery(works);
+      fetchModalGallery(works)
 
       //List des catégories
       listCategory();
@@ -182,7 +183,29 @@ document.addEventListener("submit", (e) => {
     })
   }
 
+const fetchModalGallery = (img) => {
+  const uploadWork = document.querySelector(".uploadWork");
+  uploadWork.innerHTML = "";
 
+  img.forEach((i) => {
+    const fig = document.createElement("figure");
+    fig.className = "imgContainer";
+
+    const workImage = document.createElement("img");
+    workImage.src = i.imageUrl;
+    workImage.alt = i.title;
+
+
+    const trash = document.createElement("i");
+    trash.id = i.id;
+    trash.classList.add("fa-solid", "fa-trash-can");
+    
+    //references to DOM
+    uploadWork.appendChild(fig);
+    fig.append(workImage, trash);
+  })
+
+}
   
 
 
