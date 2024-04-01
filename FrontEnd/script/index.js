@@ -161,12 +161,31 @@ document.addEventListener("submit", (e) => {
 
   // ADMIN MODE
 
+//Ouvrir Upload
   const editMode = document.querySelector(".editMode");
-  if (localStorage.getItem("key")) {
+  const tokenLog = localStorage.getItem("key");
+  const upload = document.querySelector('.upload');
+  if (tokenLog) {
     editMode.style.display = "block"
-    editMode.addEventListener('click', () => {
-      const modal = document.querySelector('.modal');
-      modal.style.display = "block"
-    })
 
+    editMode.addEventListener('click', () => {
+      
+      upload.style.display = 'flex';
+    })
   }
+
+//Fermer Upload
+  const uploadClose = document.querySelector(".uploadClose");
+  if (tokenLog) {
+    uploadClose.addEventListener("click", () => {
+      upload.style.display = 'none';
+    })
+  }
+
+
+  
+
+
+
+
+  
