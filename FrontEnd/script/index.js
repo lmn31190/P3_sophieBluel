@@ -89,7 +89,8 @@ const filterModal = () => {
   filterBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
       setCategories(btn.dataset.category);
-      btn.classList.add("active");
+      document.querySelector('.active')?.classList.remove('active');
+      btn.classList.add("active")
     });
 
     const setCategories = (setCategory) => {
@@ -108,4 +109,5 @@ const filterModal = () => {
     }
   });
 };
+
 
