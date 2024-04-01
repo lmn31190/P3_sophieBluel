@@ -110,4 +110,63 @@ const filterModal = () => {
   });
 };
 
+//LOGIN
+const loginUrl = "http://localhost:5678/api/";
 
+document.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let log = {
+    email: document.getElementById("email"),
+    password: document.getElementById("password"),
+  };
+
+  fetch(`${loginUrl}users/login`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: log.email.value,
+      password: log.password.value,
+    }),
+  }).then((response) => {
+    if (response.status === 200) {
+      response.json().then((data) => {
+        //Stackage Token dans le Local storage
+        localStorage.setItem("key", data.token);
+        window.location.replace("./index.html");
+      });
+    } else {
+      alert("Erreur dans l’identifiant ou le mot de passe");
+    }
+  });
+});
+
+
+// LOGIN & LOGOUT BTN
+
+
+  const logoutBtn = document.querySelector('.login');
+  localStorage.getItem("key") ? logoutBtn.innerHTML ="logout" : "login"
+  logoutBtn.addEventListener('click', () => {
+
+    if (localStorage.getItem("key")) {
+      localStorage.removeItem('key')
+      window.location.reload();
+    } else{
+      window.location.replace("./login.html");
+    }
+  })
+
+  // ADMIN MODE
+
+  const editMode = document.querySelector(".editMode");
+  if (localStorage.getItem("key")) {
+    editMode.style.display = "block"
+    editMode.addEventListener('click', () => {
+      const modal = document.querySelector('.modal');
+      modal.style.display = "block"
+    })
+
+  }
