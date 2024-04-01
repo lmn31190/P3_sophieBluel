@@ -16,8 +16,9 @@ window.onload = () => {
       listCategory();
 
       //fonction filtre
-      let filters = document.querySelector(".filter");
+      let filters = document.querySelector(".filters");
       filterCategory(categories, filters);
+
     });
 };
 
@@ -67,7 +68,7 @@ const filterCategory = (categories, filter) => {
 const btnAll = (filter) => {
   const btn = document.createElement("button");
   btn.innerText = "Tous";
-  btn.className = "filterBtn";
+  btn.className = "filterBtn active";
   btn.dataset.category = "Tous";
   filter.appendChild(btn);
 };
