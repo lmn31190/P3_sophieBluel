@@ -227,93 +227,91 @@ a:hover {
   margin-bottom: 1em;
 }
 
-
-.upload{
-	display: none;
-	align-items: center;
-	justify-content: center;
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	background: rgba(0, 0, 0, 0.5);
-	z-index: 1;
+.upload {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
-.uploadContainer{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	max-width: calc(100vw - 20px);
-	max-height: calc(100vh - 50px);
-	width: 630px;
-	padding: 30px;
-	border-radius: 10px;
-	background-color: #FFFFFF;
-	margin: auto;
-	overflow: auto;
-	z-index: 2;
+.uploadContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100vh - 50px);
+  width: 630px;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  margin: auto;
+  overflow: auto;
+  z-index: 2;
 }
 
 .uploadClose {
-	display: flex;
-	flex-direction: row;
-	width: 100%;
-	justify-content: flex-end;
-	cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-end;
+  cursor: pointer;
 }
 
 .upload i {
-	display: block;
-	font-size: 1.5em;
-	border-bottom: 10px;
+  display: block;
+  font-size: 1.5em;
+  border-bottom: 10px;
 }
 
 .upload h3 {
-	font-size: 26px;
-	margin-bottom: 47px;
+  font-size: 26px;
+  margin-bottom: 47px;
 }
 
 .uploadWork {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	grid-auto-rows: 1fr;
-	grid-column-gap: 8px;
-	grid-row-gap: 25px;
-	width: 70%;
-	border-bottom: 1px solid #B3B3B3;
-	padding-bottom: 47px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-auto-rows: 1fr;
+  grid-column-gap: 8px;
+  grid-row-gap: 25px;
+  width: 70%;
+  border-bottom: 1px solid #b3b3b3;
+  padding-bottom: 47px;
 }
 
-.imgContainer{
-	position: relative;
+.imgContainer {
+  position: relative;
 }
 
-.imgContainer img{
-	width: 100%;
+.imgContainer img {
+  width: 100%;
 }
 
 .imgContainer i {
-	display: block;
-	box-sizing: border-box;
-	background-color: #000000;
-	color: #FFFFFF;
-	font-size: 0.7em;
-	padding: 4px 5px;
-	border-radius: 2px;
-	position: absolute;
-	top: 7px;
-	right: 7px;	
-	cursor: pointer;
+  display: block;
+  box-sizing: border-box;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 0.7em;
+  padding: 4px 5px;
+  border-radius: 2px;
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  cursor: pointer;
 }
 
-
 .addImg {
-	width: 40% !important;
-	padding: 5px 20px !important;
-	font-size: 14px !important;
-	height: 40px !important;
+  width: 40% !important;
+  padding: 5px 20px !important;
+  font-size: 14px !important;
+  height: 40px !important;
 }
 
 .filters {
@@ -351,30 +349,38 @@ a:hover {
   width: 100%;
 }
 
-#contact {
+#contact,
+.loginModal {
   width: 50%;
   margin: auto;
 }
-#contact > * {
+#contact > *,
+.loginModal > * {
   text-align: center;
 }
-#contact h2 {
+#contact h2,
+.loginModal h2 {
   margin-bottom: 20px;
 }
-#contact form {
+#contact form,
+.loginModal form {
   text-align: left;
   margin-top: 30px;
   display: flex;
   flex-direction: column;
 }
 
-#contact input, .addImg {
+#contact input,
+.addImg,
+.loginModal input {
   height: 50px;
   font-size: 1.2em;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  cursor: pointer;
 }
-#contact label {
+#contact label,
+.loginModal label {
   margin: 2em 0 1em 0;
 }
 #contact textarea {
@@ -382,7 +388,16 @@ a:hover {
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"], .addImg {
+.loginModal a {
+  text-decoration: underline;
+}
+.loginModal {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+input[type="submit"],
+.addImg {
   font-family: "Syne";
   font-weight: 700;
   color: white;
