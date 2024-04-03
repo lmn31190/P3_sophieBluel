@@ -4,24 +4,31 @@ let works;
 let categories;
 
 // utilisation fetch pour récuperer data dans bdd
-window.onload = () => {
-  fetch(`${data}works`)
-    .then((res) => res.json())
-    .then((data) => {
-      works = data;
-      //fonction affichage works
-      showGallery(works);
-      fetchModalGallery(works)
 
-      //List des catégories
-      listCategory();
+fetch(`${data}works`)
+  .then((res) => res.json())
+  .then((data) => {
+    works = data;
+    //fonction affichage works
+    showGallery(works);
+    fetchModalGallery(works);
 
-      //fonction filtre
-      let filters = document.querySelector(".filters");
-      filterCategory(categories, filters);
+    //List des catégories
+    listCategory();
 
-    });
-};
+    //fonction filtre
+    let filters = document.querySelector(".filters");
+    filterCategory(categories, filters);
+
+    //Ouvrir Upload
+    openUpload();
+
+    //Fermer Upload
+    closeUpload();
+
+    //Suprimer projet
+  });
+
 
 const showGallery = (data) => {
   let gallery = document.querySelector(".gallery");
@@ -90,8 +97,8 @@ const filterModal = () => {
   filterBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
       setCategories(btn.dataset.category);
-      document.querySelector('.active')?.classList.remove('active');
-      btn.classList.add("active")
+      document.querySelector(".active")?.classList.remove("active");
+      btn.classList.add("active");
     });
 
     const setCategories = (setCategory) => {
@@ -107,7 +114,7 @@ const filterModal = () => {
             : (type.style.display = "none");
         });
       }
-    }
+    };
   });
 };
 
@@ -144,44 +151,43 @@ document.addEventListener("submit", (e) => {
   });
 });
 
-
 // LOGIN & LOGOUT BTN
 
+const logoutBtn = document.querySelector(".login");
+localStorage.getItem("key") ? (logoutBtn.innerHTML = "logout") : "login";
+logoutBtn.addEventListener("click", () => {
+  if (localStorage.getItem("key")) {
+    localStorage.removeItem("key");
+    window.location.reload();
+  } else {
+    window.location.replace("./login.html");
+  }
+});
 
-  const logoutBtn = document.querySelector('.login');
-  localStorage.getItem("key") ? logoutBtn.innerHTML ="logout" : "login"
-  logoutBtn.addEventListener('click', () => {
-
-    if (localStorage.getItem("key")) {
-      localStorage.removeItem('key')
-      window.location.reload();
-    } else{
-      window.location.replace("./login.html");
-    }
-  })
-
-  // ADMIN MODE
+// ADMIN MODE
 
 //Ouvrir Upload
-  const editMode = document.querySelector(".editMode");
-  const tokenLog = localStorage.getItem("key");
-  const upload = document.querySelector('.upload');
+const editMode = document.querySelector(".editMode");
+const tokenLog = localStorage.getItem("key");
+const upload = document.querySelector(".upload");
+const openUpload = () => {
   if (tokenLog) {
-    editMode.style.display = "block"
+    editMode.style.display = "block";
 
-    editMode.addEventListener('click', () => {
-      
-      upload.style.display = 'flex';
-    })
+    editMode.addEventListener("click", () => {
+      upload.style.display = "flex";
+    });
   }
+  document.addEventListener("click", trashBtn);
+};
 
 //Fermer Upload
-  const uploadClose = document.querySelector(".uploadClose");
-  if (tokenLog) {
-    uploadClose.addEventListener("click", () => {
-      upload.style.display = 'none';
-    })
-  }
+const closeUpload = () => {
+  const uploadClose = document.querySelector(".fa-xmark");
+  uploadClose.addEventListener("click", () => {
+    upload.style.display = "none";
+  });
+};
 
 const fetchModalGallery = (img) => {
   const uploadWork = document.querySelector(".uploadWork");
@@ -195,20 +201,39 @@ const fetchModalGallery = (img) => {
     workImage.src = i.imageUrl;
     workImage.alt = i.title;
 
-
     const trash = document.createElement("i");
     trash.id = i.id;
     trash.classList.add("fa-solid", "fa-trash-can");
-    
-    //references to DOM
+
     uploadWork.appendChild(fig);
     fig.append(workImage, trash);
-  })
+  });
+};
 
-}
-  
+const trashBtn = (e) => {
+  e.preventDefault();
 
+  if (e.target.matches(".fa-trash-can")) {
+    deleteWork(e.target.id);
+  }
+};
 
-
-
-  
+//
+const deleteWork = async (id) => {
+  let key = localStorage.getItem("key");
+  fetch(`${data}works/${id}`, {
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${key}`,
+    },
+  }).then((res) => {
+    if (res.ok) {
+      works = works.filter((work) => work.id != id);
+      // Mise à jour dom
+      showGallery(works);
+      fetchModalGallery(works);
+    } else {
+      alert("Erreur : " + res.status);
+    }
+  });
+};
