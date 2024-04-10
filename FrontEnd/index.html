@@ -21,17 +21,46 @@
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
   <body>
-	<div class="upload">
-		<div class="uploadContainer">
-			<div class="uploadClose"><i class="hhh fa-solid fa-xmark"></i></div>
-			<h3>Galerie photo</h3>
-			<div class="uploadWork">
-			</div>
-			<button class="addImg">Ajouter une photo</button>
-		</div>
-		
-	</div>
-	</div>
+    <div class="upload">
+      <div class="uploadContainer">
+        <div class="uploadClose"><i class="hhh fa-solid fa-xmark"></i></div>
+        <h3>Galerie photo</h3>
+        <div class="uploadWork" id="uploadWork"></div>
+        <button class="addImg">Ajouter une photo</button>
+      </div>
+
+      <div class="uploadContainer">
+        <div class="returnAndClose">
+          <span class="uploadClose"><i class="fa-solid fa-xmark"></i></span>
+          <span class="uploadReturn"
+            ><i class="fa-solid fa-arrow-left"></i
+          ></span>
+        </div>
+        <h3>Ajout Photo</h3>
+        <div class="uploadWork">
+          <form class="addPicture">
+            <div class="picture">
+              <img src="./assets/icons/image.png" alt="icon sans image" />
+              <button
+                for="file"
+                onclick="document.getElementById('getFile').click()"
+              >
+                + Ajouter photo
+              </button>
+              <input type="file" id="getFile" accept="image/png, image/jpeg" />
+              <p>jpg, png : 4mo max</p>
+            </div>
+            <div class="inputContent">
+              <label for="title">Titre</label>
+              <input type="text" id="title" />
+              <label for="selectCategory">Catégorie</label>
+              <select></select>
+            </div>
+          </form>
+        </div>
+        <input type="submit" value="Valider" />
+      </div>
+    </div>
     <header>
       <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
       <nav>
@@ -70,7 +99,9 @@
       <section id="portfolio" id="portfolio">
         <div class="editAdmin">
           <h2>Mes Projets</h2>
-          <span class="editMode"><i class="fa-regular fa-pen-to-square"></i> modifier</span>
+          <span class="editMode"
+            ><i class="fa-regular fa-pen-to-square"></i> modifier</span
+          >
         </div>
         <div class="filters"></div>
         <div class="gallery"></div>

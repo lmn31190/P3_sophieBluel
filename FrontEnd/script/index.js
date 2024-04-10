@@ -26,7 +26,6 @@ fetch(`${data}works`)
     //Fermer Upload
     closeUpload();
 
-    //Suprimer projet
   });
 
 
@@ -211,7 +210,6 @@ const fetchModalGallery = (img) => {
 };
 
 const trashBtn = (e) => {
-  e.preventDefault();
 
   if (e.target.matches(".fa-trash-can")) {
     deleteWork(e.target.id);

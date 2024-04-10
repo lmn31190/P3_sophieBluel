@@ -228,7 +228,7 @@ a:hover {
 }
 
 .upload {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
@@ -240,7 +240,8 @@ a:hover {
   z-index: 1;
 }
 
-.uploadContainer {
+.uploadContainer,
+.picture {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -255,18 +256,27 @@ a:hover {
   z-index: 2;
 }
 
-.uploadClose {
+.uploadContainer:nth-child(1){
+  display: none;
+}
+
+.returnAndClose {
   display: flex;
-  flex-direction: row;
   width: 100%;
+  flex-direction: row-reverse;
+}
+
+.uploadClose {
+  width: 100%;
+  display: flex;
   justify-content: flex-end;
-  cursor: pointer;
 }
 
 .upload i {
   display: block;
   font-size: 1.5em;
   border-bottom: 10px;
+  cursor: pointer;
 }
 
 .upload h3 {
@@ -274,12 +284,14 @@ a:hover {
   margin-bottom: 47px;
 }
 
-.uploadWork {
+#uploadWork {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-auto-rows: 1fr;
   grid-column-gap: 8px;
   grid-row-gap: 25px;
+}
+.uploadWork {
   width: 70%;
   border-bottom: 1px solid #b3b3b3;
   padding-bottom: 47px;
@@ -313,6 +325,43 @@ a:hover {
   font-size: 14px !important;
   height: 40px !important;
 }
+
+.upload .picture {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: unset;
+  background-color: #E8F1F6;
+  border-radius: 5px;
+}
+
+.picture img {
+  width: 76px;
+  color: #B9C5CC;
+}
+
+
+.picture button {
+  color: #306685;
+  border: none;
+  background-color: #CBD6DC;
+  padding: 14px 36px;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.picture input {
+  display: none;
+}
+
+.inputContent{
+  margin-top: 25px;
+  gap: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
 
 .filters {
   display: flex;
@@ -372,14 +421,21 @@ a:hover {
 
 #contact input,
 .addImg,
-.loginModal input {
+.loginModal input,
+.inputContent input, .inputContent select, .uploadContainer input{
   height: 50px;
   font-size: 1.2em;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
   cursor: pointer;
 }
-#contact label,
+
+.inputContent select{
+  color: gray;
+  padding-right: 20px !important;
+  
+}
+#contact label, .inputContent label
 .loginModal label {
   margin: 2em 0 1em 0;
 }
