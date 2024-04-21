@@ -324,6 +324,7 @@ const btnSubmitColor = () => {
   const select = document.getElementById("selectCategory");
   if (document.getElementById("title").value !== "" && document.getElementById("photo").files[0] !== undefined && select.options[select.selectedIndex].id !== "") {
     document.querySelector("#valider").style.backgroundColor = "#1D6154";
+    document.querySelector("#valider").disabled = false;
   } else {
     document.querySelector("#valider").style.backgroundColor = "#A7A7A7"
   }

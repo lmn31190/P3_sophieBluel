@@ -18,14 +18,16 @@ document.addEventListener("submit", (e) => {
       email: form.email.value,
       password: form.password.value,
     }),
-  }).then((response) => {
-    if (response.status !== 200) {
-      alert("Email ou mot de passe erronés");
-    } else {
-      response.json().then((data) => {
-        localStorage.setItem("adminToken", data.token); 
-        window.location.replace("index.html");
-      });
-    }
-  });
+  })
+    .then((response) => {
+      if (response.status !== 200) {
+        alert("Email ou mot de passe erronés");
+      } else {
+        response.json().then((data) => {
+          localStorage.setItem("adminToken", data.token);
+          window.location.replace("index.html");
+        });
+      }
+    })
+    .catch((error) => console.error("Erreur:", error));
 });
