@@ -1,4 +1,5 @@
-const baseApiUrl = "http://localhost:5678/api/";
+// URL de base pour les requêtes API.
+const login = "http://localhost:5678/api";
 
 document.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -7,7 +8,7 @@ document.addEventListener("submit", (e) => {
     password: document.getElementById("password"),
   };
 
-  fetch(`${baseApiUrl}users/login`, {
+  fetch(login + "/users/login", {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -22,7 +23,7 @@ document.addEventListener("submit", (e) => {
       alert("Email ou mot de passe erronés");
     } else {
       response.json().then((data) => {
-        localStorage.setItem("adminToken", data.token); //STORE TOKEN
+        localStorage.setItem("adminToken", data.token); 
         window.location.replace("index.html");
       });
     }

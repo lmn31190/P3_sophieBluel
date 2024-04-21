@@ -1,9 +1,12 @@
-//BDD
+// URL de base pour les requêtes API.
 const data = "http://localhost:5678/api";
+
+// Stockent respectivement les travaux et les catégories récupérés de la base de données.
 let works;
 let categories;
 
 
+//Variable pour manipuler la galerie dans le DOM.
 let gallery;
 
 // FETCH
@@ -17,7 +20,7 @@ window.onload = () => {
       //Afficher works
       getGallery(works);
       //Filtres
-      filter = document.querySelector(".filter");
+      let filter = document.querySelector(".filter");
       filters(categories, filter);
       //Admin
       adminMode(filter);
@@ -61,6 +64,8 @@ const getCategories = () => {
 };
 
 //BTN FILTERS
+
+//créée btn TOUS
 const filters = (categories, filter) => {
   const button = document.createElement("button");
   button.innerText = "Tous";
@@ -121,6 +126,8 @@ let upload = document.querySelector(".upload");
 
 const adminMode = () => {
   // vérifier adminToken
+
+  //btn logout
   const logout = document.querySelector(".login");
   localStorage.getItem("adminToken") ? (logout.innerHTML = "logout") : "login";
   logout.addEventListener("click", () => {
@@ -131,6 +138,7 @@ const adminMode = () => {
       window.location.replace("./login.html");
     }
   });
+
   if (localStorage.getItem("adminToken")) {
     document.querySelector(".filter").style.display = "none";
 
@@ -296,19 +304,19 @@ const addNewWork = () => {
   const select = document.getElementById("selectCategory");
 
   const title = document.getElementById("title").value;
-  const categoryName = select.options[select.selectedIndex].innerText;
-  const categoryId = select.options[select.selectedIndex].id;
-  const image = document.getElementById("photo").files[0];
+  const optionName = select.options[select.selectedIndex].innerText;
+  const optionId = select.options[select.selectedIndex].id;
+  const picture = document.getElementById("photo").files[0];
 
-  let validity = formValidation(image, title, categoryId);
-  if (validity === true) {
+  let valideStep = formValidation(picture, title, optionId);
+  if (valideStep === true) {
     //crée élément
     const formData = new FormData();
-    formData.append("image", image);
+    formData.append("image", picture);
     formData.append("title", title);
-    formData.append("category", categoryId);
+    formData.append("category", optionId);
 
-    postDataBdd(adminToken, formData, title, categoryName);
+    postDataBdd(adminToken, formData, title, optionName);
   }
 };
 
@@ -322,35 +330,30 @@ const btnSubmitColor = () => {
 }
 
 //Vérif Form
-const formValidation = (image, title, categoryId) => {
-  if (image == undefined) {
+const formValidation = (picture, title, optionId) => {
+  if (!picture) {
     alert("Ajoutez une image");
-    return false;
   }
-  if (title.length == 0) {
+  else if (title.length == 0) {
     alert("Ajoutez un titre");
-    return false;
   }
-  if (categoryId == "") {
+  else if (optionId == "") {
     alert("Choisissez une catégorie");
-    return false;
   } else {
     return true;
   }
 };
 
-
-
-const addToWorksData = (data, categoryName) => {
+const addToWorksData = (data, optionName) => {
   newWork = {};
   newWork.title = data.title;
   newWork.id = data.id;
-  newWork.category = { id: data.categoryId, name: categoryName };
+  newWork.category = { id: data.optionId, name: optionName };
   newWork.imageUrl = data.imageUrl;
   works.push(newWork);
 };
 
-const postDataBdd = (adminToken, formData, title, categoryName) => {
+const postDataBdd = (adminToken, formData, title, optionName) => {
   fetch(data + "/works", {
     method: "POST",
     headers: {
@@ -367,10 +370,9 @@ const postDataBdd = (adminToken, formData, title, categoryName) => {
       }
     })
     .then((data) => {
-      addToWorksData(data, categoryName);
+      addToWorksData(data, optionName);
       getGallery(works);
       document.querySelector(".upload").style.display = "none";
-      document.removeEventListener("click", closeSettingsUpload);
     })
     .catch((error) => console.error("Erreur:", error));
 };
