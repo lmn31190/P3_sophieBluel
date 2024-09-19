@@ -11,7 +11,7 @@ exports.create = async (req, res) => {
 	const title = req.body.title;
 	const categoryId = req.body.category;
 	const userId = req.auth.userId;
-	const imageUrl = `${req.protocol}://${host}/images/${req.file.filename}`;
+	const imageUrl = `https://p3-sophiebluel.onrender.com/images/${req.file.filename}`;
 	try{
 		const work = await Works.create({
 			title,
