@@ -1,4 +1,4 @@
-const loginUrl = "http://localhost:5678/api/";
+const loginUrl = "https://p3-sophiebluel.onrender.com/api/";
 
 document.addEventListener("submit", (e) => {
   e.preventDefault();

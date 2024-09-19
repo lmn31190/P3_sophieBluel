@@ -1,5 +1,5 @@
 // link bdd data
-const data = "http://localhost:5678/api/";
+const data = "https://p3-sophiebluel.onrender.com/api/";
 let works;
 let categories;
 
@@ -125,7 +125,7 @@ const filterModal = () => {
 };
 
 //LOGIN
-const loginUrl = "http://localhost:5678/api/";
+const loginUrl = "https://p3-sophiebluel.onrender.com/api/";
 
 document.addEventListener("submit", (e) => {
   e.preventDefault();
