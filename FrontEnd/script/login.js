@@ -1,33 +1,31 @@
-// URL de base pour les requêtes API.
-const login = "http://localhost:5678/api";
+const loginUrl = "http://localhost:5678/api/";
 
 document.addEventListener("submit", (e) => {
   e.preventDefault();
-  let form = {
+  let log = {
     email: document.getElementById("email"),
     password: document.getElementById("password"),
   };
 
-  fetch(login + "/users/login", {
+  fetch(`${loginUrl}users/login`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      email: form.email.value,
-      password: form.password.value,
+      email: log.email.value,
+      password: log.password.value,
     }),
-  })
-    .then((response) => {
-      if (response.status !== 200) {
-        alert("Email ou mot de passe erronés");
-      } else {
-        response.json().then((data) => {
-          localStorage.setItem("adminToken", data.token);
-          window.location.replace("index.html");
-        });
-      }
-    })
-    .catch((error) => console.error("Erreur:", error));
+  }).then((response) => {
+    if (response.status === 200) {
+      response.json().then((data) => {
+        //Stackage Token dans le Local storage
+        localStorage.setItem("token", data.token);
+        window.location.replace("./index.html");
+      });
+    } else {
+      alert("Erreur dans l’identifiant ou le mot de passe");
+    }
+  });
 });

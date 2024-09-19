@@ -11,21 +11,69 @@
       rel="stylesheet"
     />
     <meta name="description" content="" />
-    <link rel="stylesheet" href="./assets/style.css" />
-    
-    <script
-      src="https://kit.fontawesome.com/5fcbfd7080.js"
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
       crossorigin="anonymous"
-    ></script>
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./assets/style.css" />
   </head>
   <body>
+    <div class="upload">
+      <div class="uploadContainer open" id="deleteMode">
+        <div class="uploadClose"><i class="fa-solid fa-xmark"></i></div>
+        <h3>Galerie photo</h3>
+        <div class="uploadWork" id="uploadWork"></div>
+        <button class="addImg" id="addPictureBtn">Ajouter une photo</button>
+      </div>
+
+      <div class="uploadContainer" id="uploadMode">
+        <div class="returnAndClose">
+          <span class="uploadClose"><i class="fa-solid fa-xmark"></i></span>
+          <span class="uploadReturn"
+            ><i class="fa-solid fa-arrow-left"></i
+          ></span>
+        </div>
+        <h3>Ajout Photo</h3>
+        <div class="uploadWork">
+          <form class="addPicture">
+            <div class="picture">
+              <img src="./assets/icons/image.png" alt="icon sans image" />
+              <label for="photo" id="browsePictures"> + Ajouter photo </label>
+              <p>jpg, png : 4mo max</p>
+            </div>
+            <div id="picturePreview">
+              <img src="#" alt="votre image" id="picturePreviewImg" />
+            </div>
+            <input
+            type="file"
+            class="photo"
+            name="photo"
+            id="photo"
+            accept="image/png, image/jpeg"
+            required
+          />
+            <div class="inputContent">
+              <label for="title">Titre</label>
+              <input required type="text" class="title" id="title" />
+              <label for="selectCategory">Catégorie</label>
+              <select class="categorySelect" required></select>
+            </div>
+            <input type="submit" class="submitForm" value="valider" />
+          </form>
+        </div>
+      </div>
+    </div>
+    
     <header>
-      <h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
+      <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
       <nav>
         <ul>
           <li><a href="#portfolio">projets</a></li>
           <li><a href="#contact">contact</a></li>
-          <li id="logBtn" class="login" style="cursor: pointer;" >login</li>
+          <li class="login">login</li>
           <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
         </ul>
       </nav>
@@ -54,65 +102,20 @@
           </p>
         </article>
       </section>
-      <section id="portfolio">
-        <h2>Mes Projets</h2>
-        <div class="filter"></div>
+      <section id="portfolio" id="portfolio">
+        <div class="editAdmin">
+          <h2>Mes Projets</h2>
+          <span class="editMode"
+            ><i class="fa-regular fa-pen-to-square"></i> modifier</span
+          >
+        </div>
+        <div class="filters"></div>
         <div class="gallery"></div>
       </section>
-
-      <div class="upload">
-        <div class="uploadWrapper" id="editGallery">
-          <div class="uploadHeader"><i style="cursor: pointer;" class="fa-solid fa-xmark"></i></div>
-          <h3 class="uploadTitle">Galerie photo</h3>
-          <div class="uploadContent"></div>
-          <button id="btnAddImg">Ajouter une photo</button>
-        </div>
-        
-        <div class="uploadWrapper" id="addPicture">
-          <div class="uploadHeader">
-            <i class="fa-solid fa-arrow-left"></i
-            ><i class="fa-solid fa-xmark closeCreate"></i>
-          </div>
-          <h3 class="uploadTitle">Ajout photo</h3>
-          <div class="uploadContent">
-        
-            <form id="addPictureForm" name="addPictureForm">
-              <div id="labelPhoto">
-                <img
-                  src="./assets/icons/picture.png"
-                  id="picture"
-                  alt="choisir une image"
-                />
-                <label for="photo" id="browsePictures">+ Ajouter photo</label>
-                <p>jpg, png : 4mo max</p>
-              </div>
-              <div id="displayImg">
-                <img src="#" alt="votre image" id="displayImgPreview" />
-              </div>
-              <input
-                type="file"
-                class="photo"
-                name="photo"
-                id="photo"
-                accept="image/png, image/jpeg"
-                required
-              />
-              <label for="title">Titre</label>
-              <input type="text" id="title" name="title" required />
-              <label for="selectCategory">Catégorie</label>
-              <select id="selectCategory" name="selectCategory"></select>
-            </form>
-          </div>
-          <input type="submit" id="valider" value="valider" disabled />
-        </div>
-      </div>
-
-
-
       <section id="contact">
         <h2>Contact</h2>
         <p>Vous avez un projet ? Discutons-en !</p>
-        <form method="post">
+        <form action="#" method="post">
           <label for="name">Nom</label>
           <input type="text" name="name" id="name" />
           <label for="email">Email</label>

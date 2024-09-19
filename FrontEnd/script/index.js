@@ -1,379 +1,392 @@
-// URL de base pour les requêtes API.
-const data = "http://localhost:5678/api";
-
-// Stockent respectivement les travaux et les catégories récupérés de la base de données.
+// link bdd data
+const data = "http://localhost:5678/api/";
 let works;
 let categories;
 
+// utilisation fetch pour récuperer data dans bdd
 
-//Variable pour manipuler la galerie dans le DOM.
-let gallery;
+fetch(`${data}works`)
+  .then((res) => res.json())
+  .then((data) => {
+    works = data;
+    //fonction affichage works
+    showGallery(works);
+    fetchModalGallery(works);
 
-// FETCH
-window.onload = () => {
-  fetch(data + "/works")
-    .then((res) => res.json())
-    .then((data) => {
-      works = data;
-      //GET catégories
-      getCategories();
-      //Afficher works
-      getGallery(works);
-      //Filtres
-      let filter = document.querySelector(".filter");
-      filters(categories, filter);
-      //Admin
-      adminMode(filter);
-    });
-};
+    //List des catégories
+    listCategory();
 
-//GALLERIE
+    //fonction filtre
+    let filters = document.querySelector(".filters");
+    filterCategory(categories, filters);
 
-const getGallery = (data) => {
-  gallery = document.querySelector(".gallery");
+    //Ouvrir Upload
+    openUpload();
+
+    //Fermer Upload
+    closeUpload();
+
+    // Passer de mode : delete à upload
+    changeMode();
+
+    categorySelect();
+
+    picturePreview();
+
+    document.addEventListener("click", newWorkFormSubmit);
+  });
+
+const showGallery = (data) => {
+  let gallery = document.querySelector(".gallery");
   gallery.innerHTML = "";
-  //Works dans array
+
   data.forEach((i) => {
-    //creation éléments
-    const workCard = document.createElement("figure");
-    const workImage = document.createElement("img");
-    const workTitle = document.createElement("figcaption");
-    workImage.src = i.imageUrl;
-    workImage.alt = i.title;
-    workTitle.innerText = i.title;
-    workCard.dataset.category = i.category.name;
-    workCard.className = "workCard";
-    // Afficher DOM
-    gallery.appendChild(workCard);
-    workCard.append(workImage, workTitle);
+    //creation element
+    const workFig = document.createElement("figure");
+    workFig.dataset.category = i.category.name;
+    workFig.className = "workFig";
+
+    const workImg = document.createElement("img");
+    workImg.src = i.imageUrl;
+    workImg.alt = i.title;
+
+    const workCaption = document.createElement("figcaption");
+    workCaption.innerText = i.title;
+
+    gallery.appendChild(workFig);
+    workFig.append(workImg, workCaption);
   });
 };
 
-// FILTRES
-
-const getCategories = () => {
-  let listOfCategories = new Set();
-
+const listCategory = () => {
+  let categoriesList = new Set();
+  // récuperer catégories
   works.forEach((work) => {
-    listOfCategories.add(JSON.stringify(work.category));
+    categoriesList.add(JSON.stringify(work.category));
   });
 
-  const arrayOfStrings = [...listOfCategories];
+  //Ajouter catégorie dans un filtre
+  const arrayCategories = [...categoriesList];
 
-  categories = arrayOfStrings.map((s) => JSON.parse(s));
+  //.map sur array pour return les objets
+  categories = arrayCategories.map((s) => JSON.parse(s));
+  console.log(categories);
 };
 
-//BTN FILTERS
-
-//créée btn TOUS
-const filters = (categories, filter) => {
-  const button = document.createElement("button");
-  button.innerText = "Tous";
-  button.className = "filterButton active";
-  button.dataset.category = "Tous";
-  filter.appendChild(button);
-  filterBtn(categories, filter);
-  functionFilter();
+const filterCategory = (categories, filter) => {
+  btnAll(filter);
+  filterButtons(categories, filter);
+  filterModal();
 };
 
-//crée btn Filtres
-const filterBtn = (categories, filter) => {
+const btnAll = (filter) => {
+  const btn = document.createElement("button");
+  btn.innerText = "Tous";
+  btn.className = "filterBtn active";
+  btn.dataset.category = "Tous";
+  filter.appendChild(btn);
+};
+
+const filterButtons = (categories, filter) => {
   categories.forEach((categorie) => {
-    btnFilter(categorie, filter);
+    const btn = document.createElement("button");
+    btn.innerText = categorie.name;
+    btn.className = "filterBtn";
+    btn.dataset.category = categorie.name;
+    filter.appendChild(btn);
   });
 };
 
-const btnFilter = (categorie, filter) => {
-  const button = document.createElement("button");
-  button.innerText = categorie.name;
-  button.className = "filterButton";
-  button.dataset.category = categorie.name;
-  filter.appendChild(button);
-};
-
-// filtres
-const functionFilter = () => {
-  const filterBtn = document.querySelectorAll(".filterButton");
+const filterModal = () => {
+  const filterBtn = document.querySelectorAll(".filterBtn");
 
   filterBtn.forEach((btn) => {
     btn.addEventListener("click", () => {
       setCategories(btn.dataset.category);
-      document.querySelector(".active").classList.remove("active");
+      document.querySelector(".active")?.classList.remove("active");
       btn.classList.add("active");
     });
+
+    const setCategories = (setCategory) => {
+      const workType = document.querySelectorAll(".workFig");
+      if ("Tous" === setCategory) {
+        workType.forEach((figure) => {
+          figure.style.display = "block";
+        });
+      } else {
+        workType.forEach((type) => {
+          type.dataset.category === setCategory
+            ? (type.style.display = "block")
+            : (type.style.display = "none");
+        });
+      }
+    };
   });
 };
 
-//BTN "TOUS"
-const setCategories = (typeOfCategory) => {
-  const figures = document.querySelectorAll(".workCard");
-  if ("Tous" === typeOfCategory) {
-    figures.forEach((figure) => {
-      figure.style.display = "block";
-    });
-  } else {
-    figures.forEach((figure) => {
-      figure.dataset.category === typeOfCategory
-        ? (figure.style.display = "block")
-        : (figure.style.display = "none");
-    });
-  }
-};
+//LOGIN
+const loginUrl = "http://localhost:5678/api/";
 
-//ADMIN
+document.addEventListener("submit", (e) => {
+  e.preventDefault();
+  let log = {
+    email: document.getElementById("email"),
+    password: document.getElementById("password"),
+  };
 
-let upload = document.querySelector(".upload");
-
-const adminMode = () => {
-  // vérifier adminToken
-
-  //btn logout
-  const logout = document.querySelector(".login");
-  localStorage.getItem("adminToken") ? (logout.innerHTML = "logout") : "login";
-  logout.addEventListener("click", () => {
-    if (localStorage.getItem("adminToken")) {
-      localStorage.removeItem("adminToken");
-      window.location.reload();
+  fetch(`${loginUrl}users/login`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: log.email.value,
+      password: log.password.value,
+    }),
+  }).then((response) => {
+    if (response.status === 200) {
+      response.json().then((data) => {
+        //Stackage Token dans le Local storage
+        localStorage.setItem("key", data.token);
+        window.location.replace("./index.html");
+      });
     } else {
-      window.location.replace("./login.html");
+      alert("Erreur dans l’identifiant ou le mot de passe");
     }
   });
+});
 
-  if (localStorage.getItem("adminToken")) {
-    document.querySelector(".filter").style.display = "none";
+// LOGIN & LOGOUT BTN
 
-    const editBtn = `<p class="editBtn"><i class="fa-regular fa-pen-to-square"></i>Modifier</p>`;
+const logoutBtn = document.querySelector(".login");
+localStorage.getItem("key") ? (logoutBtn.innerHTML = "logout") : "login";
+logoutBtn.addEventListener("click", () => {
+  if (localStorage.getItem("key")) {
+    localStorage.removeItem("key");
+    window.location.reload();
+  } else {
+    window.location.replace("./login.html");
+  }
+});
 
-    document
-      .querySelector("#portfolio h2")
-      .insertAdjacentHTML("afterend", editBtn);
-    //Click open Module
-    document
-      .querySelector("#portfolio p")
-      .addEventListener("click", openSettingsUpload);
+// ADMIN MODE
+
+//Ouvrir admin fetch & Upload
+const editMode = document.querySelector(".editMode");
+const tokenLog = localStorage.getItem("key");
+const upload = document.querySelector(".upload");
+const uploadContainer = document.querySelector(".uploadContainer");
+const uploadMode = document.querySelector("#uploadMode");
+const deleteMode = document.querySelector("#deleteMode");
+
+const openUpload = () => {
+  if (tokenLog) {
+    editMode.style.display = "block";
+
+    editMode.addEventListener("click", () => {
+      upload.classList.add("openUpload");
+    });
+  }
+  document.addEventListener("click", trashBtn);
+  
+};
+      
+
+const changeMode = () => {
+  if (deleteMode) {
+    const changeMode = document.querySelector(".addImg");
+    changeMode.addEventListener("click", () => {
+      document.querySelector(".open")?.classList.remove("open");
+      uploadMode.classList.add("open");
+    });
+  }
+
+ 
+
+  if (uploadMode) {
+    const test = document.querySelector(".uploadReturn");
+    test.addEventListener("click", () => {
+      document.querySelector(".open")?.classList.remove("open");
+      deleteMode.classList.add("open");
+      pictureInput.onchange = picturePreview;
+    });
   }
 };
 
-// Module Upload
-
-//Vérifier adminToken
-const openSettingsUpload = () => {
-  if (localStorage.getItem("adminToken")) {
-    upload.style.display = "flex";
-    document.querySelector("#addPicture").style.display = "none";
-    document.querySelector("#editGallery").style.display = "flex";
-    adminGalery(works);
-    //Click close Module
-    upload.addEventListener("click", closeSettingsUpload);
-    // BTN Delete
-    document.addEventListener("click", deleteBtn);
-    document.addEventListener("click", uploadMode);
-  }
-};
-
-//close
-const closeSettingsUpload = (e) => {
-  if (
-    e.target === document.querySelector(".upload") ||
-    e.target === document.querySelector(".fa-xmark") ||
-    e.target === document.querySelector(".closeCreate")
-  ) {
-    document.querySelector(".upload").style.display = "none";
-    document.removeEventListener("click", closeSettingsUpload);
-    document.removeEventListener("click", deleteBtn);
-  }
-};
-
-// DELETE
-
-const adminGalery = (data) => {
-  const uploadContent = document.querySelector(".uploadContent");
-  uploadContent.innerHTML = "";
-
-  data.forEach((i) => {
-    //crée élémént
-    const work = document.createElement("figure");
-    const workImage = document.createElement("img");
-    const edit = document.createElement("figcaption");
-    const deleteIcon = document.createElement("i");
-
-    deleteIcon.id = i.id;
-    deleteIcon.classList.add("fa-solid", "fa-trash-can");
-    workImage.src = i.imageUrl;
-    workImage.alt = i.title;
-    work.className = "work";
-    //DOM
-    uploadContent.appendChild(work);
-    work.append(workImage, edit, deleteIcon);
+//Fermer admin fetch & Upload
+const closeUpload = () => {
+  const close = document.querySelector(".fa-xmark");
+  const uploadClose = document.querySelector("span i");
+  close.addEventListener("click", () => {
+    upload.classList.remove("openUpload");
+  });
+  uploadClose.addEventListener("click", () => {
+    upload.classList.remove("openUpload");
   });
 };
 
-const deleteBtn = (e) => {
-  e.preventDefault();
+let pictureInput;
 
+const openNewWorkForm = (e) => {
+  if(e.target === document.querySelector("#addPictureBtn")){
+    document.querySelector("#picturePreview").style.display = "none";
+    pictureInput = document.querySelector("#photo");
+    pictureInput.onchange = picturePreview;
+  }
+}
+
+const picturePreview = () => {
+  const [file] = pictureInput.files;
+  if (file) {
+    document.querySelector("#picturePreviewImg").src =
+      URL.createObjectURL(file);
+    document.querySelector("#picturePreview").style.display = "flex";
+    document.querySelector(".picture").style.display = "none";
+  }
+};
+
+const fetchModalGallery = (img) => {
+  const uploadWork = document.querySelector(".uploadWork");
+  uploadWork.innerHTML = "";
+
+  img.forEach((i) => {
+    const fig = document.createElement("figure");
+    fig.className = "imgContainer";
+
+    const workImage = document.createElement("img");
+    workImage.src = i.imageUrl;
+    workImage.alt = i.title;
+
+    const trash = document.createElement("i");
+    trash.id = i.id;
+    trash.classList.add("fa-solid", "fa-trash-can");
+
+    uploadWork.appendChild(fig);
+    fig.append(workImage, trash);
+  });
+};
+
+const trashBtn = (e) => {
   if (e.target.matches(".fa-trash-can")) {
     deleteWork(e.target.id);
   }
 };
 
-//DELETE bACKEND
-const deleteWork = (i) => {
-  let adminToken = localStorage.getItem("adminToken");
-  fetch(data + "/works/" + i, {
+// Supprimer Work
+const deleteWork = async (id) => {
+  let key = localStorage.getItem("key");
+  fetch(`${data}works/${id}`, {
     method: "DELETE",
     headers: {
-      authorization: `Bearer ${adminToken}`,
+      authorization: `Bearer ${key}`,
     },
   }).then((res) => {
     if (res.ok) {
-      alert("Projet supprimé");
-
-      works = works.filter((work) => work.id != i);
-
-      getGallery(works);
-      adminGalery(works);
+      works = works.filter((work) => work.id != id);
+      // Mise à jour dom
+      showGallery(works);
+      fetchModalGallery(works);
     } else {
       alert("Erreur : " + res.status);
     }
   });
 };
 
-//ADD
+const categorySelect = () => {
+  const select = document.querySelector(".categorySelect");
+  let option = document.createElement("option");
 
-let btnDisplayImg = document.querySelector("#photo");
-
-const uploadMode = (e) => {
-  if (e.target === document.querySelector("#btnAddImg")) {
-    document.querySelector("#addPicture").style.display = "flex";
-    document.querySelector("#editGallery").style.display = "none";
-    document.querySelector("#labelPhoto").style.display = "flex";
-    document.querySelector("#displayImg").style.display = "none";
-    document.getElementById("addPictureForm").reset();
-
-    selectCategory();
-    //Affichage Image
-    
-    btnDisplayImg.onchange = displayImg;
-
-    document.querySelector("#addPictureForm").onchange = btnSubmitColor;
-
-    document.addEventListener("click", closeSettingsUpload);
-    document
-      .querySelector(".uploadHeader .fa-arrow-left")
-      .addEventListener("click", openSettingsUpload);
-    document.removeEventListener("click", uploadMode);
-    document.removeEventListener("click", deleteBtn);
-    document.addEventListener("click", submitForm);
-  }
-};
-
-const displayImg = () => {
-  const [file] = btnDisplayImg.files;
-  if (file) {
-    document.querySelector("#displayImgPreview").src =
-      URL.createObjectURL(file);
-    document.querySelector("#displayImg").style.display = "flex";
-    document.querySelector("#labelPhoto").style.display = "none";
-  }
-};
-
-const selectCategory = () => {
-  document.querySelector("#selectCategory").innerHTML = "";
-
-  option = document.createElement("option");
-  document.querySelector("#selectCategory").appendChild(option);
+  select.innerHTML = "";
+  select.appendChild(option);
 
   categories.forEach((categorie) => {
     option = document.createElement("option");
-    option.value = categorie.name;
-    option.innerText = categorie.name;
+    option.value = categorie?.name;
+    option.innerText = categorie?.name;
     option.id = categorie.id;
-    document.querySelector("#selectCategory").appendChild(option);
+    select.appendChild(option);
   });
 };
 
-const submitForm = (e) => {
-  if (e.target === document.querySelector("#valider")) {
+const newWorkFormSubmit = (e) => {
+  if (e.target === document.querySelector(".submitForm")) {
     e.preventDefault();
     addNewWork();
   }
 };
 
 const addNewWork = () => {
-  let adminToken = localStorage.getItem("adminToken");
-  const select = document.getElementById("selectCategory");
-
-  const title = document.getElementById("title").value;
+  let key = localStorage.getItem("key");
+  const select = document.querySelector(".categorySelect");
+  const title = document.querySelector(".title").value;
   const optionName = select.options[select.selectedIndex].innerText;
   const optionId = select.options[select.selectedIndex].id;
-  const picture = document.getElementById("photo").files[0];
+  const picture = document.getElementById("getFile").files[0];
 
-  let valideStep = formValidation(picture, title, optionId);
-  if (valideStep === true) {
-    //crée élément
+  let validity = formValidation(picture, title, optionId);
+  if (validity === true) {
+    //create FormData
     const formData = new FormData();
     formData.append("image", picture);
     formData.append("title", title);
     formData.append("category", optionId);
-
-    postDataBdd(adminToken, formData, title, optionName);
+    
+    sendNewData(key, formData, title, optionName);
   }
 };
 
-const btnSubmitColor = () => {
-  const select = document.getElementById("selectCategory");
-  if (document.getElementById("title").value !== "" && document.getElementById("photo").files[0] !== undefined && select.options[select.selectedIndex].id !== "") {
-    document.querySelector("#valider").style.backgroundColor = "#1D6154";
-    document.querySelector("#valider").disabled = false;
-  } else {
-    document.querySelector("#valider").style.backgroundColor = "#A7A7A7"
-  }
-}
 
-//Vérif Form
-const formValidation = (picture, title, optionId) => {
-  if (!picture) {
-    alert("Ajoutez une image");
-  }
-  else if (title.length == 0) {
-    alert("Ajoutez un titre");
-  }
-  else if (optionId == "") {
-    alert("Choisissez une catégorie");
-  } else {
-    return true;
-  }
-};
-
-const addToWorksData = (data, optionName) => {
-  newWork = {};
-  newWork.title = data.title;
-  newWork.id = data.id;
-  newWork.category = { id: data.optionId, name: optionName };
-  newWork.imageUrl = data.imageUrl;
-  works.push(newWork);
-};
-
-const postDataBdd = (adminToken, formData, title, optionName) => {
-  fetch(data + "/works", {
+const sendNewData = (key, formData, title, optionName) => {
+  fetch(`${data}works`, {
     method: "POST",
     headers: {
-      authorization: `Bearer ${adminToken}`,
+      authorization: `Bearer ${key}`,
     },
     body: formData,
   })
     .then((res) => {
       if (res.ok) {
-        alert(title + " a bien été publié");
+        alert("Nouveau fichier envoyé avec succés : " + title);
         return res.json();
       } else {
         console.error("Erreur:", res.status);
       }
     })
     .then((data) => {
-      addToWorksData(data, optionName);
-      getGallery(works);
-      document.querySelector(".upload").style.display = "none";
+      addToWorks(data, optionName);
+      showGallery(works);
+      fetchModalGallery(works);
+      document.querySelector(".modal").style.display = "none";
+      document.removeEventListener("click", closeUpload);
     })
     .catch((error) => console.error("Erreur:", error));
+};
+
+const formValidation = (picture, title, optionId) => {
+  if (picture == undefined) {
+    alert("Veuillez ajouter une image");
+    return false;
+  }
+  if (title.length == 0) {
+    alert("Veuillez ajouter un titre");
+    return false;
+  }
+  if (optionId == "") {
+    alert("Veuillez choisir une catégorie");
+    return false;
+  } else {
+    upload.classList.remove("openUpload");
+    return true;
+  }
+};
+
+// Ajouter work dynamiquement
+const addToWorks = (data, optionName) => {
+  newWork = {};
+  newWork.title = data.title;
+  newWork.id = data.id;
+  newWork.category = { id: data.optionId, name: optionName };
+  newWork.imageUrl = data.imageUrl;
+  works.push(addNewWork);
 };
